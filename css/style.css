@@ -1,12 +1,33 @@
-#dLabel{
-	border: 1px solid red;
-	width: 25%;
+.ace-nav{
+	height: 100%;
+  margin: 0!important;
 }
 
-.img-xs{
-	width: 75%;
+.nav-user-photo {
+    margin: 0px 8px 0 0;
+    border: 2px solid #FFF;
+    max-width: 40px !important;
+    width: 20%;
 }
 
- .navbar-right{
- 	border: 1px solid blue;
- }
+.user-info {
+    max-width: 100px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    vertical-align: top;
+    line-height: 15px;
+    position: relative;
+    top: 6px;
+}
+
+.user-info > small{
+	display: block;
+	font-size: 10px;
+}
+
+.nav-info-user .dropdown-menu{
+	min-width: 185px !important;
+}

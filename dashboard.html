@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -31,16 +31,22 @@
                 </button>
                 <a class="navbar-brand" href="#page-top">HEALTHY FOOD</a>
             </div>            
-            <div class="nav navbar-right">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+            <div class="navbar-buttons navbar-header pull-right" rol="navigation">
+                <ul class="nav navbar-nav ace-nav">
+                    <li><a href="#">Link <span class="sr-only">(current)</span></a></li>
                     <li><a href="#">Link</a></li>
-                    <li class="dropdown">
-                      <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
-                      <ul class="dropdown-menu">
-                        <li><a href="#">Jerson Betin</a></li>
+                    <li class="dropdown nav-info-user">
+                      <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                          <img src="img/user.png" alt="" class="img-circle nav-user-photo">
+                          <span class="user-info">
+                            <small id="userFullName"></small>                                                          
+                          </span>
+                          <span class="caret"></span>
+                      </a>
+                      <ul class="dropdown-menu text-capitalize">
+                        <li><a href="#" class="text-nowrap">Jerson Betin</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">sign out</a></li>
+                        <li><a id="logout" href="#"><i class="fa fa-sign-out"></i> logout</a></li>
                       </ul>
                     </li>
                 </ul>
@@ -86,7 +92,8 @@
                                 <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
                             </li>
                             <li>
-                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
+                                <a href="#" cl
+                                ass="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
                             </li>
                             <li>
                                 <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
@@ -122,22 +129,40 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
-    <script async="async">
+    <script>
     	$(function(){                
             if(localStorage.AccessToken){
             	var obj = JSON.parse(atob(localStorage.AccessToken.split(".")[1]));
-                console.log(obj.exp);
+                console.log(obj);
                 var fecha=new Date().getTime()/1000;
                 if(obj.exp<fecha){
                     localStorage.removeItem("AccessToken");
                     window.location.href="index.html";
+                }else{
+                    getUser(obj.user);
                 }
              }else{
 				window.location.href="index.html";
              }
          });
 
-    	$('.logout').click(function(e){
+        function getUser(admin){
+            $.ajax({
+                url:"http://localhost:3000/api/admins/"+admin,
+                method: "get",
+                headers : {
+                    Authorization: localStorage.AccessToken
+                },
+                success: function(result){
+                    $("#userFullName").text(result.admin.name.first+' '+result.admin.name.last)
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+        };
+
+    	$('#logout').click(function(e){
     		localStorage.removeItem("AccessToken");
             window.location.href="index.html";
     	});
