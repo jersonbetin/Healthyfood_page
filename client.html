@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -72,63 +72,46 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="col-lg-3">
-                        <div class="col-lg-12">
-                            <img class="img-responsive" src="img/profile.png" alt="">
-                        </div>
-                        <div class="intro-text">
-                            <h3>Bienvenidos</h3>
-                            <hr class="star-light">
-                            <span class="skills">Cuidamos tu salud - Empieza a usarla</span>
-                        </div>
+                    <div class="col-lg-3  body-form">
+                        <form class="form-horizontal">
+                            <label class="f-caption m-s-b">Buscar Cliente</label>
+                          <div class="form-group">
+                            <label for="firstName" class="pull-left">Nombre:</label>
+                            <input type="text" class="form-control" id="firstName">
+                          </div>
+                          <div class="form-group">
+                            <label for="lastName" class="pull-left">Apellido:</label>
+                            <input type="text" class="form-control" id="lastName">
+                          </div>
+                          <div class="form-group">
+                            <label for="email" class="pull-left">Email:</label>
+                            <input type="text" class="form-control" id="email">
+                          </div>
+                          <div class="form-group">
+                            <div class="pull-left">
+                              <button type="submit" id="seach" class="btn btn-default">Buscar</button>
+                            </div>
+                          </div>
+                        </form>
                     </div>
-                    <div class="col-lg-9 body-list-general">
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs nav-justified" role="tablist">
-                         <li role="presentation" class="active"><a href="#restuarant" aria-controls="restuarant" role="tab" data-toggle="tab">Restaurantes</a></li>
-                         <li role="presentation"><a href="#client" aria-controls="client" role="tab" data-toggle="tab">Clientes</a></li>
-                        </ul>
+                    <div class="col-lg-9 body-list">
+                        <table class="table table-hover m-l-t">
+                            <caption class="text-center">Lista De Clientes</caption>
+                            <thead>
+                                <tr class="headerTable">
+                                    <td>N°</td>
+                                    <td>Nombre</td>
+                                    <td>Email</td>
+                                    <td>Telefono</td>
+                                    <td>Direccion</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyClient">
 
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                         <div role="tabpanel" class="tab-pane active panel-list" id="restuarant">
-                            <table class="table table-condensed table-hover m-l-b">
-                                <thead>
-                                    <tr class="headerTable">
-                                        <td>N°</td>
-                                        <td>Usuario</td>
-                                        <td>Nombre</td>
-                                        <td>Telefono</td>
-                                        <td>Direccion</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                                <tbody id="bodyRestaurant">
-
-                                </tbody>
-                            </table>
-                         </div>
-                         <div role="tabpanel" class="tab-pane panel-list" id="client">
-                            <table class="table table-hover m-l-t">
-                                <thead>
-                                    <tr class="headerTable">
-                                        <td>N°</td>
-                                        <td>Nombre</td>
-                                        <td>Email</td>
-                                        <td>Telefono</td>
-                                        <td>Direccion</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </thead>
-                                <tbody id="bodyClient">
-
-                                </tbody>
-                            </table>
-                         </div>
-                        </div>
-
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -201,7 +184,6 @@
                         window.location.href="index.html";
                     }else{
                         getUser(obj.user);
-                        loadAllRestaruant();
                         loadAllClient();
                     }
                  }else{
@@ -230,45 +212,10 @@
                 window.location.href="index.html";
             });
 
-            function loadAllRestaruant(){
-                $.ajax({
-                    url:"http://localhost:3000/api/restaurants",
-                    method: "get",
-                    headers : {
-                        Authorization: localStorage.AccessToken
-                    },
-                    success: function(result){
-                        console.log(result);
-                        var restaurants = result.restaurants;
-                        var table = "";
-                        if(restaurants.length){
-                            for(var i=0; i<restaurants.length;i++){
-                                table+="<tr>";
-                                table+="<td><center>"+(i+1)+"</center></td>";
-                                table+="<td><center>"+restaurants[i].user+"</center></td>";
-                                table+="<td><center>"+restaurants[i].name+"</center></td>";
-                                table+="<td><center>"+restaurants[i].phone+"</center></td>";
-                                table+="<td><center>"+restaurants[i].address+"</center></td>";
-                                table+="<td><center><a class='btn btn-info btn-xs editRestaurant' user='"+restaurants[i].user+"'>Resumen</a></center></td>";
-                                table+="<td><center><a class='btn btn-danger btn-xs removeRestaurant' user='"+restaurants[i].user+"'>Eliminar</a></center></td>";
-                                table+="</tr>";
-                            }
-                        }else{
-                            table+="<tr>";
-                            table+="<td colspan='7'><center>No existen restaurantes</center></td>";
-                            table+="</tr>";
-                        }
-                        document.getElementById("bodyRestaurant").innerHTML+= table;
-                    },
-                    error:function(err){
-                        console.log(err);
-                    }
-                });
-            }
 
-            function loadAllClient(){
+            function loadAllClient(query){
                 $.ajax({
-                    url:"http://localhost:3000/api/clients",
+                    url:"http://localhost:3000/api/clients?"+query,
                     method: "get",
                     headers : {
                         Authorization: localStorage.AccessToken
@@ -302,36 +249,6 @@
                 });
             }
 
-            $("#bodyRestaurant").on('click','.removeRestaurant', function(e){
-                e.preventDefault();
-                var id = $(this).attr("user");
-                swal({
-                    title: "Are you sure?",
-                    text: "You will not be able to recover this restaurant!",
-                    type: "error",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    closeOnConfirm: true },
-                    function(confirm){
-                        if(confirm){
-                            $.ajax({
-                                url:"http://localhost:3000/api/restaurants/"+id,
-                                method: "delete",
-                                headers : {
-                                    Authorization: localStorage.AccessToken
-                                },
-                                success:function(result){
-                                    console.log(result.status);
-                                    loadAllRestaruant();
-                                },
-                                error:function(err){
-                                    console.log(err.status);
-                                }
-                            });
-                        }
-                    });
-            });
 
             $("#bodyClient").on('click','.removeClient', function(e){
                 e.preventDefault();
@@ -363,8 +280,57 @@
                         }
                     });
             });
-        });
 
+            $("#firstName").blur(function(e){
+                var first = $(this).val();
+                var last = $("#lastName").val();
+                    if(first.trim() != "" || last.trim() != ""){
+                        $("#email").attr("readonly", "true");
+                    }else{
+                        $("#email").removeAttr("readonly");
+                    }
+            });
+
+            $("#lastName").blur(function(e){
+                 var last = $(this).val();
+                var first = $("#firstName").val();
+                    if(first.trim() != "" || last.trim() != ""){
+                        $("#email").attr("readonly", "true");
+                    }else{
+                        $("#email").removeAttr("readonly");
+                    }
+            });
+
+            $("#email").blur(function(e){
+                var text = $(this).val();
+                    if(text.trim() != ""){
+                        $("#firstName").attr("readonly", "true");
+                        $("#lastName").attr("readonly", "true");
+                    }else{
+                        $("#firstName").removeAttr("readonly");
+                        $("#lastName").removeAttr("readonly");
+                    }
+            });
+
+            $("#seach").click(function(e){
+                e.preventDefault();
+                var query = "";
+                var first = $("#firstName").val();
+                var last = $("#lastName").val();
+                var email = $("#email").val();
+                if(first.trim() != ""){
+                    query = "first="+first+"&";
+                }
+                if(last.trim() != ""){
+                    query += "last="+last+"&";
+                }
+                if(email.trim() != ""){
+                    query += "email="+email;
+                }
+                loadAllClient(query);
+            });
+
+        });
 
     </script>
 </body>

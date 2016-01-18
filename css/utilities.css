@@ -1,0 +1,28 @@
+.m-l-t{
+  margin-top: 20px;
+}
+
+.m-s-t{
+  margin-top: 10px;
+}
+
+.m-xs-t{
+  margin-top: 5px;
+}
+
+.m-l-b{
+  margin-bottom : 20px;
+}
+
+.m-s-b{
+  margin-bottom: 10px;
+}
+
+.m-xs-b{
+  margin-bottom: 5px;
+}
+
+.f-caption{
+  font-weight: bold;
+  font-size: 20px;
+}
